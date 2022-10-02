@@ -12,7 +12,7 @@ android {
         minSdk = 26
         targetSdk = 33
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.0"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -26,6 +26,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            isDebuggable = false
+        }
+        getByName("debug") {
+            isDebuggable = true
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -50,12 +55,17 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.0")
-    implementation("androidx.compose.ui:ui:1.3.0-beta03")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.3.0-beta03")
-    implementation("androidx.compose.material3:material3:1.0.0-beta03")
-    debugImplementation("androidx.customview:customview:1.2.0-alpha02")
-    debugImplementation("androidx.customview:customview-poolingcontainer:1.0.0")
+    implementation(libs.core)
+    implementation(libs.lifecycle)
+    implementation(libs.activity)
+    implementation(libs.compose.animation)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.icons)
+    implementation(libs.compose.material3.window)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.preview)
+    implementation(libs.compose.ui)
+    implementation(libs.accompanist.systemuicontroller)
+    debugImplementation(libs.compose.tooling)
 }
