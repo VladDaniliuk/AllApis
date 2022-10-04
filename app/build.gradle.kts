@@ -1,6 +1,9 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("io.gitlab.arturbosch.detekt").version("1.21.0")
 }
 
 android {
@@ -52,6 +55,18 @@ android {
         }
     }
     buildToolsVersion = "33.0.0"
+
+    detekt {
+        toolVersion = "1.22.0-RC1"
+        config = files("config/detekt/detekt.yml")
+        buildUponDefaultConfig = true
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        reports {
+            md.required.set(true)
+        }
+    }
 }
 
 dependencies {
@@ -68,4 +83,5 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.accompanist.systemuicontroller)
     debugImplementation(libs.compose.tooling)
+    detektPlugins(libs.twitter.detekt)
 }

@@ -1,0 +1,26 @@
+name: Check build
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  static-analisys:
+    name: Execute analyse on code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: action/checkout@v2
+
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Run detekt Linter
+        run: ./gradlew detekt
