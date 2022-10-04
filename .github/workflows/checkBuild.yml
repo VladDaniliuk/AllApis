@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: action/checkout@v2
-
       - name: Set up our JDK environment
         uses: actions/setup-java@v2
         with:
