@@ -2,7 +2,6 @@ name: Check build
 
 on:
   pull_request:
-  push:
 
 jobs:
   static-analisys:
@@ -24,3 +23,36 @@ jobs:
 
       - name: Run detekt Linter
         run: ./gradlew detekt
+        id: detekt
+        continue-on-error: true
+
+      - name: Success
+        if: ${{ steps.detekt.outcome == 'success' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: APPROVE
+          MESSAGE: 'Everything is fine.'
+
+      - name: Failure
+        id: failure
+        if: ${{ steps.detekt.outcome != 'success' }}
+        uses: juliangruber/read-file-action@v1.1.4
+        with:
+          path: ./app/build/reports/detekt/detekt.md
+
+      - name: Comment success
+        if: ${{ steps.detekt.outcome == 'success' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: APPROVE
+          MESSAGE: 'Detekt run without problems'
+
+      - name: Comment failure
+        if: ${{ steps.detekt.outcome != 'success' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: REQUEST_CHANGES
+          MESSAGE: '${{steps.failure.outcome}}'
