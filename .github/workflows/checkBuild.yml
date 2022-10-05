@@ -55,4 +55,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
-          MESSAGE: '${{steps.failure.outcome}}'
+          MESSAGE: '${{steps.failure.outputs.content}}'
