@@ -30,7 +30,7 @@ jobs:
         if: ${{ steps.build.outcome == 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'Detekt run without problems.'
 
@@ -45,7 +45,7 @@ jobs:
         if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: '${{steps.failure.outputs.content}}'
 
@@ -75,7 +75,7 @@ jobs:
         if: ${{ steps.detekt.outcome == 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'Detekt run without problems.'
 
@@ -90,7 +90,7 @@ jobs:
         if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: '${{steps.failure.outputs.content}}'
 
@@ -115,7 +115,7 @@ jobs:
         id: last_release
         uses: InsonusK/get-latest-release@v1.0.1
         with:
-          myToken: ${{ github.token }}
+          myToken: ${{ secrets.TOKEN }}
           exclude_types: "release"
           view_top: 1
 
@@ -130,7 +130,7 @@ jobs:
         if: ${{ steps.detekt.outcome == 'false' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: 'Please, change version of new build'
 
@@ -138,6 +138,6 @@ jobs:
         if: ${{ steps.detekt.outcome == 'false' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'Version is good'
