@@ -62,9 +62,32 @@ android {
         buildUponDefaultConfig = true
     }
 
-    tasks.withType<Detekt>().configureEach {
-        reports {
-            md.required.set(true)
+    tasks {
+        withType<Detekt>().configureEach {
+            reports {
+                md.required.set(true)
+            }
+        }
+
+        register("compareVersions") {
+            val tagVersion = project.properties["tagVersion"] as String
+
+            if (tagVersion.isEmpty()) {
+                print(true)
+            } else {
+                val (tagMajor, tagMinor, tagPatch) = tagVersion.split(".")
+                val (major, minor, patch) = android.defaultConfig.versionName!!.split(".")
+
+                if (tagMajor < major) {
+                    print(true)
+                } else if ((tagMinor < minor) and (tagMajor == major)) {
+                    print(true)
+                } else if ((tagPatch < patch) and (tagMinor == minor) and (tagMajor == major)) {
+                    print(true)
+                } else {
+                    print(false)
+                }
+            }
         }
     }
 }

@@ -4,7 +4,52 @@ on:
   pull_request:
 
 jobs:
-  static-analisys:
+  check-build:
+    name: Build apk for checking code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build apk
+        run: ./gradlew build
+        id: build
+        continue-on-error: true
+
+      - name: Comment success
+        if: ${{ steps.build.outcome == 'success' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: APPROVE
+          MESSAGE: 'Detekt run without problems.'
+
+      - name: Failure
+        id: failure
+        if: ${{ steps.build.outcome != 'success' }}
+        uses: juliangruber/read-file-action@v1.1.4
+        with:
+          path: ./app/build/reports/detekt/detekt.md
+
+      - name: Comment failure
+        if: ${{ steps.detekt.outcome != 'success' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: REQUEST_CHANGES
+          MESSAGE: '${{steps.failure.outputs.content}}'
+
+  static-analysis:
     name: Execute analyse on code
     runs-on: ubuntu-latest
 
@@ -26,13 +71,13 @@ jobs:
         id: detekt
         continue-on-error: true
 
-      - name: Success
+      - name: Comment success
         if: ${{ steps.detekt.outcome == 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           EVENT_TYPE: APPROVE
-          MESSAGE: 'Everything is fine.'
+          MESSAGE: 'Detekt run without problems.'
 
       - name: Failure
         id: failure
@@ -41,14 +86,6 @@ jobs:
         with:
           path: ./app/build/reports/detekt/detekt.md
 
-      - name: Comment success
-        if: ${{ steps.detekt.outcome == 'success' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EVENT_TYPE: APPROVE
-          MESSAGE: 'Detekt run without problems'
-
       - name: Comment failure
         if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
@@ -56,3 +93,51 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: '${{steps.failure.outputs.content}}'
+
+  check-version:
+    name: Compare version of last release and current build.
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Get last version from github
+        id: last_release
+        uses: InsonusK/get-latest-release@v1.0.1
+        with:
+          myToken: ${{ github.token }}
+          exclude_types: "release"
+          view_top: 1
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Compare versions
+        id: compare_result
+        run: ./gradlew compareVersions -PtagVersion='${{ steps.last_release.outputs.tag_name }}'
+
+      - name: Comment need version up
+        if: ${{ steps.detekt.outcome == 'false' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: REQUEST_CHANGES
+          MESSAGE: 'Please, change version of new build'
+
+      - name: Comment version is good
+        if: ${{ steps.detekt.outcome == 'false' }}
+        uses: Garlic-Team/Auto-Review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_TYPE: APPROVE
+          MESSAGE: 'Version is good'
