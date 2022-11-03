@@ -15,3 +15,6 @@
 local.properties
 /.idea/
 /.fleet/
+*.jks
+*keystore.properties
+*encoded.txt

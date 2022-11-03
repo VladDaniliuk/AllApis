@@ -9,133 +9,85 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up our JDK environment
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: '16'
+      - run: echo -e ${{secrets.PROPERTIES_B64}} | base64 -di > ${{ github.workspace}}/github-keystore.properties
+      - run: echo ${{secrets.JKS_B64}} | base64 -di > ${{ github.workspace}}/github.jks
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Build apk
-        run: ./gradlew build
+      - name: Use Detekt
+      - run: chmod +x ./gradlew
+      - run: ./gradlew build
         id: build
         continue-on-error: true
 
-      - name: Comment success
-        if: ${{ steps.build.outcome == 'success' }}
+      - if: ${{ steps.build.outcome == 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'Detekt run without problems.'
 
-      - name: Failure
+      - if: ${{ steps.build.outcome != 'success' }}
         id: failure
-        if: ${{ steps.build.outcome != 'success' }}
         uses: juliangruber/read-file-action@v1.1.4
         with:
           path: ./app/build/reports/detekt/detekt.md
 
-      - name: Comment failure
-        if: ${{ steps.detekt.outcome != 'success' }}
+      - if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: '${{steps.failure.outputs.content}}'
 
-  static-analysis:
-    name: Execute analyse on code
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up our JDK environment
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
       - name: Run detekt Linter
-        run: ./gradlew detekt
+      - run: ./gradlew detekt
         id: detekt
         continue-on-error: true
 
-      - name: Comment success
-        if: ${{ steps.detekt.outcome == 'success' }}
+      - if: ${{ steps.detekt.outcome == 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'Detekt run without problems.'
 
-      - name: Failure
+      - if: ${{ steps.detekt.outcome != 'success' }}
         id: failure
-        if: ${{ steps.detekt.outcome != 'success' }}
         uses: juliangruber/read-file-action@v1.1.4
         with:
           path: ./app/build/reports/detekt/detekt.md
 
-      - name: Comment failure
-        if: ${{ steps.detekt.outcome != 'success' }}
+      - if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: '${{steps.failure.outputs.content}}'
 
-  check-version:
-    name: Compare version of last release and current build.
-    runs-on: ubuntu-latest
+      - name: Compare version of last release and current build
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up our JDK environment
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Get last version from github
-        id: last_release
+      - id: last_release
         uses: InsonusK/get-latest-release@v1.0.1
         with:
           myToken: ${{ secrets.TOKEN }}
           exclude_types: "release"
           view_top: 1
 
-      - name: Build
-        run: ./gradlew build
-
-      - name: Compare versions
-        id: compare_result
+      - id: compare_result
         run: ./gradlew compareVersions -PtagVersion='${{ steps.last_release.outputs.tag_name }}'
 
-      - name: Comment need version up
-        if: ${{ steps.detekt.outcome == 'false' }}
+      - if: ${{ steps.detekt.outcome == 'false' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: 'Please, change version of new build'
 
-      - name: Comment version is good
-        if: ${{ steps.detekt.outcome == 'false' }}
+      - if: ${{ steps.detekt.outcome == 'false' }}
         uses: Garlic-Team/Auto-Review@1.0.5
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}

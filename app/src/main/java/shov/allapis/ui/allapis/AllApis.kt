@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,14 +30,13 @@ import shov.allapis.data.ApiItem
 import shov.allapis.ui.utils.CustomPreview
 import shov.allapis.ui.utils.CustomPreviewParameterProvider
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AllApisScreen(elements: Map<ApiCategory, List<ApiItem>>, modifier: Modifier = Modifier) {
+fun AllApisScreen(apiMap: ApiMap, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        elements.forEach { (category, items) ->
+        apiMap.items.forEach { (category, items) ->
             stickyHeader {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
@@ -75,25 +75,30 @@ fun AllApisScreen(elements: Map<ApiCategory, List<ApiItem>>, modifier: Modifier 
     }
 }
 
+@Immutable
+data class ApiMap(val items: Map<ApiCategory, List<ApiItem>>)
+
 @Preview(showBackground = true)
 @Composable
 private fun AllApisPreview(
     @PreviewParameter(CustomPreviewParameterProvider::class) pairs: Pair<Boolean, Boolean>
 ) {
-    val elements = mapOf(
-        ApiCategory(R.string.animals, Icons.Rounded.Pets) to listOf(
-            ApiItem(R.string.cataas, R.string.cataas_description),
-            ApiItem(
-                R.string.adoptapet_for_test,
-                R.string.cataas_description
+    val elements = ApiMap(
+        mapOf(
+            ApiCategory(R.string.animals, Icons.Rounded.Pets) to listOf(
+                ApiItem(R.string.cataas, R.string.cataas_description),
+                ApiItem(
+                    R.string.adoptapet_for_test,
+                    R.string.cataas_description
+                )
+            ),
+            ApiCategory(
+                R.string.anime_for_test,
+                Icons.Rounded.VideoFile
+            ) to listOf(
+                ApiItem(R.string.aniapi_for_test, R.string.cataas_description),
+                ApiItem(R.string.anidb_for_test, R.string.cataas_description)
             )
-        ),
-        ApiCategory(
-            R.string.anime_for_test,
-            Icons.Rounded.VideoFile
-        ) to listOf(
-            ApiItem(R.string.aniapi_for_test, R.string.cataas_description),
-            ApiItem(R.string.anidb_for_test, R.string.cataas_description)
         )
     )
 
