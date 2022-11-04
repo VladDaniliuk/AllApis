@@ -37,19 +37,18 @@ android {
         create("github") {
             dimension = "store"
             applicationIdSuffix = ".github"
+            buildTypes.getByName("release").signingConfig = signingConfigs.getByName("github")
         }
 
         create("google") {
             dimension = "store"
             applicationIdSuffix = ".google"
+            buildTypes.getByName("release").signingConfig = signingConfigs.getByName("google")
         }
     }
 
     buildTypes {
         release {
-            productFlavors.getByName("github").signingConfig = signingConfigs.getByName("github")
-            productFlavors.getByName("google").signingConfig = signingConfigs.getByName("google")
-
             isDebuggable = false
 
             isMinifyEnabled = true
