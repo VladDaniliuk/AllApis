@@ -33,8 +33,6 @@ import shov.allapis.ui.utils.CustomPreviewParameterProvider
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AllApisScreen(apiMap: ApiMap, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
     LazyColumn(modifier = modifier.fillMaxSize()) {
         apiMap.items.forEach { (category, items) ->
             stickyHeader {
@@ -49,7 +47,7 @@ fun AllApisScreen(apiMap: ApiMap, modifier: Modifier = Modifier) {
                             contentDescription = null
                         )
                         Text(
-                            text = context.getString(category.nameId),
+                            text = LocalContext.current.getString(category.nameId),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -59,12 +57,12 @@ fun AllApisScreen(apiMap: ApiMap, modifier: Modifier = Modifier) {
             items(items) { item ->
                 Column(modifier = Modifier.padding(horizontal = 4.dp)) {
                     Text(
-                        text = context.getString(item.name),
+                        text = LocalContext.current.getString(item.name),
                         style = MaterialTheme.typography.titleMedium
                     )
 
                     Text(
-                        text = context.getString(item.description),
+                        text = LocalContext.current.getString(item.description),
                         style = MaterialTheme.typography.titleSmall
                     )
 

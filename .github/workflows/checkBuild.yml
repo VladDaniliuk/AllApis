@@ -14,8 +14,13 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '16'
-      - run: echo -e ${{secrets.PROPERTIES_B64}} | base64 -di > ${{ github.workspace}}/github-keystore.properties
-      - run: echo ${{secrets.JKS_B64}} | base64 -di > ${{ github.workspace}}/github.jks
+      - env:
+          ENCODED_STRING: ${{ secrets.PROPERTIES_B64 }}
+        run: echo -e $ENCODED_STRING  | base64 -di > ${{ github.workspace}}/github-keystore.properties
+
+      - env:
+          ENCODED_STRING: ${{ secrets.JKS_B64 }}
+        run: echo -e $ENCODED_STRING  | base64 -di > ${{ github.workspace}}/github.jks
 
       - name: Use Detekt
       - run: chmod +x ./gradlew
