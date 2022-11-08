@@ -37,5 +37,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           VERSION_VARIABLE: versionName
           APP_FILE: ./app/build.gradle.kts
-          APP_FOLDER: ./app/github/release/AllApis-github-release.apk
+          APP_FOLDER: ./app/build/outputs/apk/github/release/AllApis-github-release.apk
           RELEASE_TITLE: All Apis

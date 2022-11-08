@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.ApkSigningConfig
+import com.android.build.api.dsl.ApplicationProductFlavor
 import io.gitlab.arturbosch.detekt.Detekt
 import java.io.FileInputStream
 import java.util.Properties
@@ -34,15 +35,8 @@ android {
     setFlavorDimensions(listOf("store"))
 
     productFlavors {
-        create("github") {
-            dimension = "store"
-            applicationIdSuffix = ".github"
-        }
-
-        create("google") {
-            dimension = "store"
-            applicationIdSuffix = ".google"
-        }
+        createProductFlavor(signingConfigs, "github")
+        createProductFlavor(signingConfigs, "google")
     }
 
     buildTypes {
@@ -125,36 +119,35 @@ android {
             }
         }
     }
+}
 
-    gradle.startParameter.taskNames.forEach { taskName ->
-        when (taskName) {
-            "githubRelease" -> {
-                productFlavors.getByName("github").signingConfig =
-                    signingConfigs.getByName("github")
-            }
-
-            "googleRelease" -> {
-                productFlavors.getByName("google").signingConfig =
-                    signingConfigs.getByName("google")
-            }
-        }
+fun NamedDomainObjectContainer<ApplicationProductFlavor>.createProductFlavor(
+    signingConfigs: NamedDomainObjectContainer<out ApkSigningConfig>,
+    name: String
+) {
+    create(name) {
+        dimension = "store"
+        applicationIdSuffix = ".$name"
+        signingConfig = signingConfigs.getByName(name)
     }
 }
 
 fun NamedDomainObjectContainer<out ApkSigningConfig>.createSigningConfig(name: String) {
     if (file("../$name-keystore.properties").exists().not()) {
         logger.warn("Release builds may not work: signing config doesn't found.")
-        return
-    }
-    val properties = Properties().also { properties ->
-        properties.load(FileInputStream(file("../$name-keystore.properties")))
-    }
 
-    this.create(name) {
-        keyAlias = properties["keyAlias"] as String
-        keyPassword = properties["keyPassword"] as String
-        storeFile = file(properties["storeFile"] as String)
-        storePassword = properties["storePassword"] as String
+        create(name)
+    } else {
+        val properties = Properties().also { properties ->
+            properties.load(FileInputStream(file("../$name-keystore.properties")))
+        }
+
+        create(name) {
+            keyAlias = properties["keyAlias"] as String
+            keyPassword = properties["keyPassword"] as String
+            storeFile = file(properties["storeFile"] as String)
+            storePassword = properties["storePassword"] as String
+        }
     }
 }
 
