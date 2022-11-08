@@ -37,13 +37,11 @@ android {
         create("github") {
             dimension = "store"
             applicationIdSuffix = ".github"
-            buildTypes.getByName("release").signingConfig = signingConfigs.getByName("github")
         }
 
         create("google") {
             dimension = "store"
             applicationIdSuffix = ".google"
-            buildTypes.getByName("release").signingConfig = signingConfigs.getByName("google")
         }
     }
 
@@ -124,6 +122,20 @@ android {
                 } else {
                     print(false)
                 }
+            }
+        }
+    }
+
+    gradle.startParameter.taskNames.forEach { taskName ->
+        when (taskName) {
+            "githubRelease" -> {
+                productFlavors.getByName("github").signingConfig =
+                    signingConfigs.getByName("github")
+            }
+
+            "googleRelease" -> {
+                productFlavors.getByName("google").signingConfig =
+                    signingConfigs.getByName("google")
             }
         }
     }
