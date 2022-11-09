@@ -1,12 +1,9 @@
 # AllApis
 
-<details><summary>Modules</summary>
-    <p>
+## Modules
 ```mermaid
 graph TD;
     app-->settings;
     app-->datastore;
     settings-->datastore;
 ```
-    </p>
-</details>
