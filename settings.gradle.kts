@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AllApis"
 include(":app")
+include(":datastore")

@@ -155,6 +155,8 @@ dependencies {
     implementation(libs.core)
     implementation(libs.lifecycle)
     implementation(libs.activity)
+
+    //ui
     implementation(libs.compose.animation)
     implementation(libs.compose.foundation)
     implementation(libs.compose.icons)
@@ -165,5 +167,10 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.accompanist.systemuicontroller)
     debugImplementation(libs.compose.tooling)
+
+    //datastore
+    implementation(project(":datastore"))
+    implementation(libs.datastore)
+
     detektPlugins(libs.twitter.detekt)
 }
