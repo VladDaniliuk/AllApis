@@ -172,5 +172,6 @@ dependencies {
     implementation(project(":datastore"))
     implementation(libs.datastore)
 
+    //tests
     detektPlugins(libs.twitter.detekt)
 }

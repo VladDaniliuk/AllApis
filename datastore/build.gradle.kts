@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("io.gitlab.arturbosch.detekt").version("1.21.0")
 }
 
 android {
@@ -34,8 +35,18 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    detekt {
+        toolVersion = "1.22.0-RC1"
+        config = files("config/detekt/detekt.yml")
+        buildUponDefaultConfig = true
+    }
 }
 
 dependencies {
+    //data store
     implementation(libs.datastore)
+
+    //tests
+    detektPlugins(libs.twitter.detekt)
 }
