@@ -12,11 +12,13 @@ graph TD
 ## Links
 ### Modules
 
+```bash
 .
-|-- app
-|   \-- allapis
-|-- feature
-|   \-- settings
-|-- core
-    |-- datastore
-    \-- ui
+├── app
+│   └── allapis
+├── feature
+│   └── settings
+└── core
+    ├── datastore
+    └── ui
+```
