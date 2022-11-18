@@ -17,7 +17,7 @@ graph TD
 
 <pre>
 .
-├── <a href="https://github.com">app</a>
+├── <a href="./app/APP.md">app</a>
 │   └── allapis
 ├── feature
 │   └── settings
