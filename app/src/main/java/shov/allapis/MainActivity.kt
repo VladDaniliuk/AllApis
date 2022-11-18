@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AllApisTheme {
                 val navController = rememberAnimatedNavController()
+
                 CustomScaffold {
                     AnimatedNavHost(
                         navController = navController,

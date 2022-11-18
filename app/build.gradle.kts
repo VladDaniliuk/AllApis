@@ -172,7 +172,7 @@ dependencies {
     debugImplementation(libs.compose.tooling)
 
     //datastore
-    implementation(projects.datastore)
+    implementation(projects.core.datastore)
     implementation(libs.datastore)
 
     //di
