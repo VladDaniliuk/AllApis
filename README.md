@@ -1,6 +1,7 @@
 # AllApis
 
 ## Modules
+
 ```mermaid
 graph TD
     app:allapis-->core:ui
@@ -9,17 +10,18 @@ graph TD
     core:ui-->core:datastore
     core:datastore
 ```
+
 ## Links
+
 ### Modules
 
 <pre>
 .
-├── [app](https://github.com)
+├── <a href="https://github.com">app</a>
 │   └── allapis
 ├── feature
 │   └── settings
 └── core
     ├── datastore
     └── ui
-```
 </pre>
