@@ -12,7 +12,7 @@ graph TD
 ## Links
 ### Modules
 
-```bash
+<pre>
 .
 ├── [app](https://github.com)
 │   └── allapis
@@ -22,3 +22,4 @@ graph TD
     ├── datastore
     └── ui
 ```
+</pre>
