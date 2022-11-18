@@ -14,15 +14,9 @@ graph TD
 
 .
 ├── app
-
 │   └── allapis
-
 ├── feature
-
 │   └── settings
-
 └── core
-
     ├── datastore
-
     └── ui
