@@ -29,7 +29,7 @@ fun AllApisTheme(modifier: Modifier = Modifier, content: @Composable (modifier: 
         }
 
     val isDynamicColor =
-        DataStorePreferences(context.dataStore).isDynamicColor.collectAsState(false).value
+        DataStorePreferences(context.dataStore).isDynamicColor.collectAsState(true).value
 
     val colorScheme = when {
         isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {

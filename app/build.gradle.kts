@@ -74,7 +74,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
     packagingOptions {
@@ -165,11 +165,12 @@ dependencies {
     implementation(libs.compose.runtime)
     implementation(libs.compose.preview)
     implementation(libs.compose.ui)
+    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.systemuicontroller)
     debugImplementation(libs.compose.tooling)
 
     //datastore
-    implementation(project(":datastore"))
+    implementation(projects.datastore)
     implementation(libs.datastore)
 
     //tests
