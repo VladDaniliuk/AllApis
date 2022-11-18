@@ -2,8 +2,10 @@
 
 ## Modules
 ```mermaid
-graph TD;
-    app-->settings;
-    app-->datastore;
-    settings-->datastore;
+graph TD
+    app-->core:ui
+    app-->settings
+    settings-->core:datastore
+    core:ui-->core:datastore
+    core:datastore
 ```
