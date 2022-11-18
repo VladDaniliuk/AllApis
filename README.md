@@ -9,3 +9,13 @@ graph TD
     core:ui-->core:datastore
     core:datastore
 ```
+## Links
+### Modules
+.
+├── app
+│   └── allapis
+├── feature
+│   └── settings
+└── core
+    ├── datastore
+    └── ui
