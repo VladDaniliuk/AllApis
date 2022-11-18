@@ -5,9 +5,11 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    id("kotlin-android")
-    id("io.gitlab.arturbosch.detekt").version("1.21.0")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -173,6 +175,15 @@ dependencies {
     implementation(projects.datastore)
     implementation(libs.datastore)
 
+    //di
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.viewmodel)
+    kapt(libs.hilt.compiler)
+
     //tests
     detektPlugins(libs.twitter.detekt)
+}
+
+kapt {
+    correctErrorTypes = true
 }
