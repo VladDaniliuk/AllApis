@@ -13,10 +13,10 @@ graph TD
 ### Modules
 
 .
-├── app
-│   └── allapis
-├── feature
-│   └── settings
-└── core
-    ├── datastore
-    └── ui
+|-- app
+|   \-- allapis
+|-- feature
+|   \-- settings
+|-- core
+    |-- datastore
+    \-- ui
