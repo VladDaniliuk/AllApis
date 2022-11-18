@@ -1,8 +1,5 @@
 package shov.allapis.ui.utils
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,7 +18,7 @@ fun CustomPreview(
     isDark: Boolean,
     isDynamic: Boolean,
     modifier: Modifier = Modifier,
-    content: @Composable (PaddingValues) -> Unit
+    content: @Composable () -> Unit
 ) {
 
     AllApisThemeContent(
@@ -33,10 +30,6 @@ fun CustomPreview(
             else -> LightColors
         }
     ) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            CustomScaffold { paddingValues ->
-                content(paddingValues)
-            }
-        }
+        CustomScaffold(content = content)
     }
 }
