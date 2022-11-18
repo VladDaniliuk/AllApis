@@ -180,6 +180,9 @@ dependencies {
     implementation(libs.hilt.viewmodel)
     kapt(libs.hilt.compiler)
 
+    //projects
+    implementation(projects.core.ui)
+
     //tests
     detektPlugins(libs.twitter.detekt)
 }
