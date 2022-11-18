@@ -20,5 +20,7 @@ pluginManagement {
 rootProject.name = "AllApis"
 include(":app")
 
+include(":settings")
+
 include(":core:ui")
 include(":core:datastore")

@@ -171,10 +171,6 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     debugImplementation(libs.compose.tooling)
 
-    //datastore
-    implementation(projects.core.datastore)
-    implementation(libs.datastore)
-
     //di
     implementation(libs.hilt.android)
     implementation(libs.hilt.viewmodel)
