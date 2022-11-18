@@ -18,7 +18,7 @@ pluginManagement {
 }
 
 rootProject.name = "AllApis"
-include(":app")
+include(":app:allapis")
 
 include(":feature:settings")
 

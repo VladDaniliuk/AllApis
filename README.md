@@ -3,9 +3,9 @@
 ## Modules
 ```mermaid
 graph TD
-    app-->core:ui
-    app-->settings
-    settings-->core:datastore
+    app:allapis-->core:ui
+    app:allapis-->feature:settings
+    feature:settings-->core:datastore
     core:ui-->core:datastore
     core:datastore
 ```
