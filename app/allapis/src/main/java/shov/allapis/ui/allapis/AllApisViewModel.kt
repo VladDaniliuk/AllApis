@@ -17,15 +17,9 @@ class AllApisViewModel @Inject constructor() : ViewModel() {
         mapOf(
             ApiCategory(R.string.animals, Icons.Rounded.Pets) to listOf(
                 ApiItem(R.string.cataas, R.string.cataas_description),
-                ApiItem(
-                    R.string.adoptapet_for_test,
-                    R.string.cataas_description
-                )
+                ApiItem(R.string.adoptapet_for_test, R.string.cataas_description)
             ),
-            ApiCategory(
-                R.string.anime_for_test,
-                Icons.Rounded.VideoFile
-            ) to listOf(
+            ApiCategory(R.string.anime_for_test, Icons.Rounded.VideoFile) to listOf(
                 ApiItem(R.string.aniapi_for_test, R.string.cataas_description),
                 ApiItem(R.string.anidb_for_test, R.string.cataas_description)
             )

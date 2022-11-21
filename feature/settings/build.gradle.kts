@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -36,6 +38,20 @@ android {
         jvmTarget = "11"
     }
 
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
+
+    packagingOptions {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
+    }
+
     detekt {
         toolVersion = "1.22.0-RC1"
         config = files("config/detekt/detekt.yml")
@@ -51,7 +67,14 @@ dependencies {
     implementation(libs.compose.runtime)
     implementation(libs.compose.preview)
     implementation(libs.compose.ui)
+    implementation(projects.core.ui)
+    implementation(libs.accompanist.navigation.animation)
     debugImplementation(libs.compose.tooling)
+
+    //di
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.viewmodel)
+    kapt(libs.hilt.compiler)
 
     //datastore
     implementation(projects.core.datastore)

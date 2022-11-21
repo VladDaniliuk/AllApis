@@ -167,6 +167,7 @@ dependencies {
     implementation(libs.compose.runtime)
     implementation(libs.compose.preview)
     implementation(libs.compose.ui)
+    implementation(projects.core.ui)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.systemuicontroller)
     debugImplementation(libs.compose.tooling)
@@ -176,8 +177,12 @@ dependencies {
     implementation(libs.hilt.viewmodel)
     kapt(libs.hilt.compiler)
 
-    //projects
-    implementation(projects.core.ui)
+    //datastore
+    implementation(projects.core.datastore)
+    implementation(libs.datastore)
+
+    //features
+    implementation(projects.feature.settings)
 
     //tests
     detektPlugins(libs.twitter.detekt)

@@ -1,39 +1,35 @@
 package shov.allapis.ui.allapis
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import shov.allapis.R
 import shov.allapis.data.ApiItem
 import shov.allapis.ui.utils.CustomPreview
 import shov.allapis.ui.utils.CustomPreviewParameterProvider
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun LazyListScope.allApisItems(items: List<ApiItem>) {
-    items(items) { item ->
-        Column(modifier = Modifier.padding(horizontal = 4.dp)) {
-            Text(
-                text = LocalContext.current.getString(item.name),
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Text(
-                text = LocalContext.current.getString(item.description),
-                style = MaterialTheme.typography.titleSmall
-            )
-
-            Divider(modifier = Modifier.padding(horizontal = 4.dp))
+    items(
+        count = items.size,
+        key = { index: Int ->
+            items[index].name
         }
+    ) { index: Int ->
+        ListItem(
+            headlineText = {
+                Text(LocalContext.current.getString(items[index].name))
+            },
+            supportingText = {
+                Text(LocalContext.current.getString(items[index].description))
+            }
+        )
     }
 }
 
@@ -47,7 +43,7 @@ private fun AllApisItemsPreview(
             allApisItems(
                 listOf(
                     ApiItem(R.string.app_name, R.string.app_name),
-                    ApiItem(R.string.app_name, R.string.app_name)
+                    ApiItem(R.string.anime_for_test, R.string.app_name)
                 )
             )
         }

@@ -26,7 +26,7 @@ import shov.allapis.ui.utils.CustomPreviewParameterProvider
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.allApisStickyHeader(category: ApiCategory) {
-    stickyHeader {
+    stickyHeader(key = category.nameId) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primaryContainer
