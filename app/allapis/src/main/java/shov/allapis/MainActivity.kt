@@ -9,6 +9,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import shov.allapis.settings.ui.navigation.settingsComposable
 import shov.allapis.ui.allapis.AllApisScreen
 import shov.allapis.ui.navigation.Screens
 import shov.allapis.ui.theme.AllApisTheme
@@ -34,9 +35,7 @@ class MainActivity : ComponentActivity() {
                         composable(Screens.Main.name) {
                             AllApisScreen(navController = navController)
                         }
-                        composable(Screens.Settings.name) {
-
-                        }
+                        settingsComposable(navController)
                     }
                 }
             }
