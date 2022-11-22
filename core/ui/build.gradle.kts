@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -71,6 +73,11 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.accompanist.systemuicontroller)
     debugImplementation(libs.compose.tooling)
+
+    //di
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.viewmodel)
+    kapt(libs.hilt.compiler)
 
     //datastore
     implementation(projects.core.datastore)
