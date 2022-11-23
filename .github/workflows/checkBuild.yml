@@ -82,6 +82,7 @@ jobs:
       - name: Check CHANGELOG.md
         id: checkChangelog
         run: grep -q '## ${{ steps.versionName.outcome }}' CHANGELOG.md ; echo $?
+        continue-on-error: true
 
       - if: ${{ steps.checkChangelog.outcome != '0' }}
         uses: Garlic-Team/Auto-review@1.0.5
