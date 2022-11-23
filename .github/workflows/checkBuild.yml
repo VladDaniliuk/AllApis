@@ -35,6 +35,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
+          BRANCHES: feature/*
           AUTHOR: 'Detekt[bot]'
           MESSAGE: Detekt run without problems.
 
@@ -49,6 +50,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          BRANCHES: feature/*
           AUTHOR: 'Detekt[bot]'
           MESSAGE: '${{steps.failure.outputs.content}}'
 
@@ -76,6 +78,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
+          BRANCHES: feature/*
           AUTHOR: 'VersionChecker[bot]'
           MESSAGE: 'Version is good'
 
@@ -91,15 +94,17 @@ jobs:
       - if: ${{ steps.checkChangelog.outcome != '0' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          AUTHOR: 'ChangelogChecker[bot]'
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          BRANCHES: feature/*
+          AUTHOR: 'ChangelogChecker[bot]'
           MESSAGE: 'Please, add new version to CHANGELOG.md'
 
       - if: ${{ steps.checkChangelog.outcome == '0' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          AUTHOR: 'ChangelogChecker[bot]'
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
+          BRANCHES: feature/*
+          AUTHOR: 'ChangelogChecker[bot]'
           MESSAGE: 'CHANGELOG.md is good'
