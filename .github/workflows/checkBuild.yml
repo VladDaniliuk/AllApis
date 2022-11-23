@@ -50,31 +50,6 @@ jobs:
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: '${{steps.failure.outputs.content}}'
 
-      - name: Run detekt Linter
-        run: ./gradlew detekt
-        id: detekt
-        continue-on-error: true
-
-      - if: ${{ steps.detekt.outcome == 'success' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
-        with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          EVENT_TYPE: APPROVE
-          MESSAGE: 'Detekt run without problems.'
-
-      - if: ${{ steps.detekt.outcome != 'success' }}
-        id: failure
-        uses: juliangruber/read-file-action@v1.1.4
-        with:
-          path: ./app/allapis/build/reports/detekt/detekt.md
-
-      - if: ${{ steps.detekt.outcome != 'success' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
-        with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          EVENT_TYPE: REQUEST_CHANGES
-          MESSAGE: '${{steps.failure.outputs.content}}'
-
       - name: Compare version of last release and current build
         id: last_release
         uses: InsonusK/get-latest-release@v1.0.1
