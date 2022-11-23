@@ -26,7 +26,7 @@ fun RadioText(text: String, selected: Boolean, onClick: () -> Unit, modifier: Mo
 
 @Preview(showBackground = true)
 @Composable
-fun RadioTextPreview(
+private fun RadioTextPreview(
     @PreviewParameter(CustomPreviewParameterProvider::class) pairs: Pair<Boolean, Boolean>
 ) {
     CustomPreview(isDark = pairs.first, isDynamic = pairs.second) {

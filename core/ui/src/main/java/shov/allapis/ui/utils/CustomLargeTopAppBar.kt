@@ -50,7 +50,7 @@ fun CustomLargeTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun CustomLargeTopAppBarPreview(
+private fun CustomLargeTopAppBarPreview(
     @PreviewParameter(CustomPreviewParameterProvider::class) pairs: Pair<Boolean, Boolean>
 ) {
     CustomPreview(isDark = pairs.first, isDynamic = pairs.second) {

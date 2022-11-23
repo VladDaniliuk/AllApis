@@ -120,6 +120,12 @@ android {
                 }
             }
         }
+
+        register("getVersionName") {
+            doLast {
+                print(android.defaultConfig.versionName)
+            }
+        }
     }
 }
 

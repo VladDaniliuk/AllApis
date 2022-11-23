@@ -18,8 +18,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import shov.allapis.datastore.THEME
 
 @Composable
-fun AllApisTheme(modifier: Modifier = Modifier, content: @Composable (modifier: Modifier) -> Unit) {
-    val themeViewModel = hiltViewModel<ThemeViewModel>()
+fun AllApisTheme(
+    modifier: Modifier = Modifier,
+    themeViewModel: ThemeViewModel = hiltViewModel(),
+    content: @Composable (modifier: Modifier) -> Unit
+) {
     val context = LocalContext.current
     val theme by themeViewModel.theme.collectAsState()
     val isDynamicColor by themeViewModel.isDynamicColor.collectAsState()

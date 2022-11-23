@@ -25,7 +25,7 @@ fun AllApisScreen(
         onSettingsNavigate = { navController.navigate(Screens.Settings.name) }
     ) { paddingValues ->
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {

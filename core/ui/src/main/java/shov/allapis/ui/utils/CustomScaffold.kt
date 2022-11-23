@@ -20,7 +20,7 @@ fun CustomScaffold(
 
 @Preview(showBackground = true)
 @Composable
-fun CustomScaffoldPreview(
+private fun CustomScaffoldPreview(
     @PreviewParameter(CustomPreviewParameterProvider::class) pairs: Pair<Boolean, Boolean>
 ) {
     CustomPreview(isDark = pairs.first, isDynamic = pairs.second) {}

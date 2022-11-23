@@ -41,7 +41,7 @@ jobs:
         id: failure
         uses: juliangruber/read-file-action@v1.1.4
         with:
-          path: ./app/build/reports/detekt/detekt.md
+          path: ./app/allapis/build/reports/detekt/detekt.md
 
       - if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
@@ -66,7 +66,7 @@ jobs:
         id: failure
         uses: juliangruber/read-file-action@v1.1.4
         with:
-          path: ./app/build/reports/detekt/detekt.md
+          path: ./app/allapis/build/reports/detekt/detekt.md
 
       - if: ${{ steps.detekt.outcome != 'success' }}
         uses: Garlic-Team/Auto-Review@1.0.5
@@ -100,3 +100,25 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'Version is good'
+
+      - name: Check CHANGELOG.md
+
+      - id: versionName
+        run: ./gradlew getVersionName
+
+      - id: checkChangelog
+        run: grep -q '## ${{ steps.versionName.outcome }}' CHANGELOG.md ; echo $?
+
+      - if: ${{ steps.checkChangelog.outcome != '0' }}
+        uses: Garlic-Team/Auto-review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          EVENT_TYPE: REQUEST_CHANGES
+          MESSAGE: 'Please, add new version to CHANGELOG.md'
+
+      - if: ${{ steps.checkChangelog.outcome == '0' }}
+        uses: Garlic-Team/Auto-review@1.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          EVENT_TYPE: APPROVE
+          MESSAGE: 'CHANGELOG.md is good'

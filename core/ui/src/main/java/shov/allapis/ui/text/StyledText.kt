@@ -23,7 +23,7 @@ fun StyledText(
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
-    onTextLayout: (TextLayoutResult) -> Unit = {},
+    onTextLayout: (TextLayoutResult) -> Unit = {}
 ) {
     Text(
         text = text,
@@ -48,7 +48,7 @@ fun StyledText(
 
 @Preview(showBackground = true)
 @Composable
-fun TypographyTextPreview(
+private fun TypographyTextPreview(
     @PreviewParameter(CustomPreviewParameterProvider::class) pairs: Pair<Boolean, Boolean>
 ) {
     CustomPreview(isDark = pairs.first, isDynamic = pairs.second) {
