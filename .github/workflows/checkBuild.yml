@@ -22,9 +22,11 @@ jobs:
           ENCODED_STRING: ${{ secrets.JKS_B64 }}
         run: echo -e $ENCODED_STRING  | base64 -di > ${{ github.workspace}}/github.jks
 
+      - name: Set gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Use Detekt
-      - run: chmod +x ./gradlew
-      - run: ./gradlew build
+        run: ./gradlew build
         id: build
         continue-on-error: true
 
@@ -49,7 +51,7 @@ jobs:
           MESSAGE: '${{steps.failure.outputs.content}}'
 
       - name: Run detekt Linter
-      - run: ./gradlew detekt
+        run: ./gradlew detekt
         id: detekt
         continue-on-error: true
 
@@ -74,8 +76,7 @@ jobs:
           MESSAGE: '${{steps.failure.outputs.content}}'
 
       - name: Compare version of last release and current build
-
-      - id: last_release
+        id: last_release
         uses: InsonusK/get-latest-release@v1.0.1
         with:
           myToken: ${{ secrets.TOKEN }}
@@ -99,12 +100,12 @@ jobs:
           EVENT_TYPE: APPROVE
           MESSAGE: 'Version is good'
 
-      - name: Check CHANGELOG.md
-
-      - id: versionName
+      - name: Get versionName
+        id: versionName
         run: ./gradlew getVersionName
 
-      - id: checkChangelog
+      - name: Check CHANGELOG.md
+        id: checkChangelog
         run: grep -q '## ${{ steps.versionName.outcome }}' CHANGELOG.md ; echo $?
 
       - if: ${{ steps.checkChangelog.outcome != '0' }}
