@@ -31,11 +31,12 @@ jobs:
         continue-on-error: true
 
       - if: ${{ steps.build.outcome == 'success' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
+        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
-          MESSAGE: 'Detekt run without problems.'
+          AUTHOR: 'Detekt[bot]'
+          MESSAGE: Detekt run without problems.
 
       - if: ${{ steps.build.outcome != 'success' }}
         id: failure
@@ -44,10 +45,11 @@ jobs:
           path: ./app/allapis/build/reports/detekt/detekt.md
 
       - if: ${{ steps.detekt.outcome != 'success' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
+        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          AUTHOR: 'Detekt[bot]'
           MESSAGE: '${{steps.failure.outputs.content}}'
 
       - name: Compare version of last release and current build
@@ -61,18 +63,20 @@ jobs:
       - id: compare_result
         run: ./gradlew compareVersions -PtagVersion='${{ steps.last_release.outputs.tag_name }}'
 
-      - if: ${{ steps.detekt.outcome == 'false' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
+      - if: ${{ steps.compare_result.outcome == 'false' }}
+        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          AUTHOR: 'VersionChecker[bot]'
           MESSAGE: 'Please, change version of new build'
 
-      - if: ${{ steps.detekt.outcome == 'false' }}
-        uses: Garlic-Team/Auto-Review@1.0.5
+      - if: ${{ steps.compare_result.outcome == 'true' }}
+        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
+          AUTHOR: 'VersionChecker[bot]'
           MESSAGE: 'Version is good'
 
       - name: Get versionName
@@ -85,15 +89,17 @@ jobs:
         continue-on-error: true
 
       - if: ${{ steps.checkChangelog.outcome != '0' }}
-        uses: Garlic-Team/Auto-review@1.0.5
+        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
+          AUTHOR: 'ChangelogChecker[bot]'
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           MESSAGE: 'Please, add new version to CHANGELOG.md'
 
       - if: ${{ steps.checkChangelog.outcome == '0' }}
-        uses: Garlic-Team/Auto-review@1.0.5
+        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
+          AUTHOR: 'ChangelogChecker[bot]'
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
           EVENT_TYPE: APPROVE
           MESSAGE: 'CHANGELOG.md is good'
