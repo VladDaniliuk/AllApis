@@ -63,9 +63,9 @@ jobs:
           view_top: 1
 
       - id: compare_result
-        run: ./gradlew compareVersions -PtagVersion='${{ steps.last_release.outputs.tag_name }}'
+        run: ./gradlew compareVersions -PtagVersion='${{ steps.last_release.outputs.tag_name }}' | tail -1
 
-      - if: ${{ steps.compare_result.outcome == 'false' }}
+      - if: ${{ steps.compare_result.outputs.content == 'false' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
           AUTHOR: 'VersionChecker[bot]'
           MESSAGE: 'Please, change version of new build'
 
-      - if: ${{ steps.compare_result.outcome == 'true' }}
+      - if: ${{ steps.compare_result.outputs.content == 'true' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
@@ -84,11 +84,11 @@ jobs:
 
       - name: Get versionName
         id: versionName
-        run: ./gradlew getVersionName
+        run: ./gradlew getVersionName | tail -1
 
       - name: Check CHANGELOG.md
         id: checkChangelog
-        run: grep -q '## ${{ steps.versionName.outcome }}' CHANGELOG.md ; echo $?
+        run: grep -q '## ${{ steps.versionName.outputs.content }}' CHANGELOG.md ; echo $?
         continue-on-error: true
 
       - if: ${{ steps.checkChangelog.outcome != '0' }}
@@ -100,7 +100,7 @@ jobs:
           AUTHOR: 'ChangelogChecker[bot]'
           MESSAGE: 'Please, add new version to CHANGELOG.md'
 
-      - if: ${{ steps.checkChangelog.outcome == '0' }}
+      - if: ${{ steps.checkChangelog.outputs.content == '0' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
