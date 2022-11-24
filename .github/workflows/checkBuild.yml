@@ -33,7 +33,7 @@ jobs:
       - if: ${{ steps.build.outcome == 'success' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: APPROVE
           BRANCHES: feature/*
           AUTHOR: 'Detekt[bot]'
@@ -48,7 +48,7 @@ jobs:
       - if: ${{ steps.detekt.outcome != 'success' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           BRANCHES: feature/*
           AUTHOR: 'Detekt[bot]'
@@ -68,7 +68,7 @@ jobs:
       - if: ${{ steps.compare_result.outcome == 'false' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           AUTHOR: 'VersionChecker[bot]'
           MESSAGE: 'Please, change version of new build'
@@ -76,7 +76,7 @@ jobs:
       - if: ${{ steps.compare_result.outcome == 'true' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: APPROVE
           BRANCHES: feature/*
           AUTHOR: 'VersionChecker[bot]'
@@ -94,7 +94,7 @@ jobs:
       - if: ${{ steps.checkChangelog.outcome != '0' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
           BRANCHES: feature/*
           AUTHOR: 'ChangelogChecker[bot]'
@@ -103,7 +103,7 @@ jobs:
       - if: ${{ steps.checkChangelog.outcome == '0' }}
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: APPROVE
           BRANCHES: feature/*
           AUTHOR: 'ChangelogChecker[bot]'
