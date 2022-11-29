@@ -42,7 +42,7 @@ jobs:
           reviewdog_filter: nofilter
           detekt_parallel: true
           fail_on_error: true
-          reviewdog_reporter: github-pr-review
+          reviewdog_reporter: github-pr-check
 
       - name: Compare version of last release and current build
         id: last_release
