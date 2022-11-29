@@ -34,13 +34,14 @@ jobs:
 
       - name: Use Detekt
         uses: alaegin/Detekt-Action@v1.22.0-RC3
-        continue-on-error: true
         with:
           github_token: ${{ secrets.BOT_TOKEN }}
           detekt_plugins: '${{ github.workspace}}/detekt/plugin/${{ steps.twitterPlugin.outputs.filename }}'
           detekt_config: ${{ github.workspace}}/detekt/config/detekt.yml
+          reviewdog_level: error
           reviewdog_filter: nofilter
           detekt_parallel: true
+          fail_on_error: true
           reviewdog_reporter: github-pr-review
 
       - name: Compare version of last release and current build
