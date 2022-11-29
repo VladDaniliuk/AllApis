@@ -25,34 +25,23 @@ jobs:
       - name: Set gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Download twitter detekt plugin
+        id: twitterPlugin
+        uses: suisei-cn/actions-download-file@v1.3.0
+        with:
+          url: "https://github.com/twitter/compose-rules/releases/download/v0.0.26/detekt-twitter-compose-0.0.26-all.jar"
+          target: ${{ github.workspace}}/detekt/plugin/
+
       - name: Use Detekt
-        run: ./gradlew build
-        id: build
+        uses: alaegin/Detekt-Action@v1.22.0-RC3
         continue-on-error: true
-
-      - if: ${{ steps.build.outcome == 'success' }}
-        uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-          EVENT_TYPE: APPROVE
-          BRANCHES: feature/*
-          AUTHOR: 'Detekt[bot]'
-          MESSAGE: Detekt run without problems.
-
-      - if: ${{ steps.build.outcome != 'success' }}
-        id: failure
-        uses: juliangruber/read-file-action@v1.1.4
-        with:
-          path: ./app/allapis/build/reports/detekt/detekt.md
-
-      - if: ${{ steps.detekt.outcome != 'success' }}
-        uses: golfzaptw/action-auto-reviews-from-branches@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-          EVENT_TYPE: REQUEST_CHANGES
-          BRANCHES: feature/*
-          AUTHOR: 'Detekt[bot]'
-          MESSAGE: '${{steps.failure.outputs.content}}'
+          github_token: ${{ secrets.BOT_TOKEN }}
+          detekt_plugins: '${{ github.workspace}}/detekt/plugin/${{ steps.twitterPlugin.outputs.filename }}'
+          detekt_config: ${{ github.workspace}}/detekt/config/detekt.yml
+          reviewdog_filter: nofilter
+          detekt_parallel: true
+          reviewdog_reporter: github-pr-review
 
       - name: Compare version of last release and current build
         id: last_release
