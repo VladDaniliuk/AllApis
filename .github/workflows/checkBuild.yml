@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      ########################################Initial setup#########################################
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
@@ -24,7 +25,7 @@ jobs:
 
       - name: Set gradlew executable
         run: chmod +x ./gradlew
-
+      #########################################Detekt setup#########################################
       - name: Download twitter detekt plugin
         id: twitterPlugin
         uses: suisei-cn/actions-download-file@v1.3.0
@@ -33,6 +34,8 @@ jobs:
           target: ${{ github.workspace}}/detekt/plugin/
 
       - name: Use Detekt
+        continue-on-error: true
+        id: detekt
         uses: alaegin/Detekt-Action@v1.22.0-RC3
         with:
           github_token: ${{ secrets.BOT_TOKEN }}
@@ -42,8 +45,8 @@ jobs:
           reviewdog_filter: nofilter
           detekt_parallel: true
           fail_on_error: true
-          reviewdog_reporter: github-pr-check
-
+          reviewdog_reporter: github-pr-review
+      #######################################Compare versions#######################################
       - name: Compare version of last release and current build
         id: last_release
         uses: InsonusK/get-latest-release@v1.0.1
@@ -54,47 +57,38 @@ jobs:
 
       - id: compare_result
         run: ./gradlew compareVersions -PtagVersion='${{ steps.last_release.outputs.tag_name }}' | tail -1
-
-      - if: ${{ steps.compare_result.outputs.content == 'false' }}
-        uses: golfzaptw/action-auto-reviews-from-branches@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-          EVENT_TYPE: REQUEST_CHANGES
-          AUTHOR: 'VersionChecker[bot]'
-          MESSAGE: 'Please, change version of new build'
-
-      - if: ${{ steps.compare_result.outputs.content == 'true' }}
-        uses: golfzaptw/action-auto-reviews-from-branches@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-          EVENT_TYPE: APPROVE
-          BRANCHES: feature/*
-          AUTHOR: 'VersionChecker[bot]'
-          MESSAGE: 'Version is good'
-
+      ########################################Check changelog#######################################
       - name: Get versionName
         id: versionName
         run: ./gradlew getVersionName | tail -1
 
       - name: Check CHANGELOG.md
         id: checkChangelog
-        run: grep -q '## ${{ steps.versionName.outputs.content }}' CHANGELOG.md ; echo $?
-        continue-on-error: true
-
-      - if: ${{ steps.checkChangelog.outcome != '0' }}
+        run: if grep -q '## \[${{ steps.versionName.outputs.content }}\]' CHANGELOG.md; then echo "true"; else echo "false"; fi
+      ###########################################Review PR##########################################
+      - name: Detekt error
+        if: steps.detekt.outcome == 'failure'
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
-          BRANCHES: feature/*
-          AUTHOR: 'ChangelogChecker[bot]'
-          MESSAGE: 'Please, add new version to CHANGELOG.md'
+          AUTHOR: 'VersionChecker[bot]'
+          MESSAGE: ':x: Detekt check.'
 
-      - if: ${{ steps.checkChangelog.outputs.content == '0' }}
+      - name: Compare versions error
+        if: ${{ steps.compare_result.outputs.content }} == 'false'
         uses: golfzaptw/action-auto-reviews-from-branches@master
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
-          EVENT_TYPE: APPROVE
-          BRANCHES: feature/*
-          AUTHOR: 'ChangelogChecker[bot]'
-          MESSAGE: 'CHANGELOG.md is good'
+          EVENT_TYPE: REQUEST_CHANGES
+          AUTHOR: 'VersionChecker[bot]'
+          MESSAGE: ':x: Version bump.'
+
+      - name: Changelog check
+        if: ${{ steps.checkChangelog.outputs.content }} == 'false'
+        uses: golfzaptw/action-auto-reviews-from-branches@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+          EVENT_TYPE: REQUEST_CHANGES
+          AUTHOR: 'VersionChecker[bot]'
+          MESSAGE: ':x: CHANGELOG.md check.'
