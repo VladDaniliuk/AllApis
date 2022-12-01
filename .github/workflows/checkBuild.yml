@@ -72,6 +72,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          BRANCHES: feature/*
           AUTHOR: 'VersionChecker[bot]'
           MESSAGE: ':x: Detekt check.'
 
@@ -81,6 +82,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          BRANCHES: feature/*
           AUTHOR: 'VersionChecker[bot]'
           MESSAGE: ':x: Version bump.'
 
@@ -90,5 +92,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
           EVENT_TYPE: REQUEST_CHANGES
+          BRANCHES: feature/*
           AUTHOR: 'VersionChecker[bot]'
           MESSAGE: ':x: CHANGELOG.md check.'
