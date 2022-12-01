@@ -6,5 +6,21 @@ dependencyResolutionManagement {
         gradlePluginPortal()
     }
 }
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
 rootProject.name = "AllApis"
-include(":app")
+include(":app:allapis")
+
+include(":feature:settings")
+
+include(":core:ui")
+include(":core:datastore")

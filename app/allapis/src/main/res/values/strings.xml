@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AllApis</string>
+    <string name="animals">Animals</string>
+    <string name="cataas">CATAAS</string>
+    <string name="adoptapet_for_test">AdoptAPet (FOR TEST)</string>
+    <string name="anime_for_test">Anime (FOR TEST)</string>
+    <string name="aniapi_for_test">AniAPI (FOR TEST)</string>
+    <string name="anidb_for_test">AniDB (FOR TEST)</string>
+    <string name="cataas_description">Is a REST API to spread peace and love (or not) thanks to cats. Have 1177 cats for now</string>
+    <string name="settings">Settings</string>
+</resources>
